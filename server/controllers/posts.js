@@ -7,6 +7,8 @@ import PostMessage from "../models/postMessage.js";
 
 export const getPosts = async (req, res) => {
   try {
+    //allowing "http://localhost:3000" (frontend) to access (according to cors policy)
+    res.setHeader("Access-Control-Allow-Origin", "http://localhost:3000");
     //retrieving all posts we have currently in database
     const postMessages = await PostMessage.find();
     //setting status to 200(OK) and returning array of
@@ -19,6 +21,20 @@ export const getPosts = async (req, res) => {
 };
 
 export const createPost = async (req, res) => {
+  res.setHeader("Access-Control-Allow-Origin", "*");
+  res.setHeader("Access-Control-Allow-Credentials", "true");
+  res.setHeader("Access-Control-Max-Age", "1800");
+  res.setHeader("Access-Control-Allow-Headers", "content-type");
+  res.setHeader(
+    "Access-Control-Allow-Methods",
+    "PUT, POST, GET, DELETE, PATCH, OPTIONS"
+  );
+  // "Access-Control-Allow-Methods": "GET,PUT,POST,DELETE,PATCH,OPTIONS"
+  // res.header(
+  //   "Access-Control-Allow-Headers",
+  //   "Origin, X-Requested-With, Content-Type, Accept"
+  // );
+
   //we have access to request's body
   const post = req.body;
   //creating a new post Message
