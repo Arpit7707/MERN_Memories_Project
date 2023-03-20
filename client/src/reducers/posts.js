@@ -17,12 +17,34 @@
 //   }
 // };
 
+//these reducers store response from backend in that global store
+//and using useSelector we can access and fetch that data and update our frontend
+//using useDispatch() we can get access to redux's dispatch function which triggers(dispatches)
+//action declared in action/posts.js
+//and reducers/posts.js stores response from backend in that global store
+
+import {
+  FETCH_ALL,
+  CREATE,
+  UPDATE,
+  DELETE,
+  LIKE,
+} from "../constants/actionTypes";
+
 export default (posts = [], action) => {
   switch (action.type) {
-    case "FETCH_ALL":
+    case DELETE:
+      //returning all posts except the one we want to delete
+      return posts.filter((post) => post._id !== action.payload);
+    case UPDATE:
+    case LIKE:
+      return posts.map((post) =>
+        post._id === action.payload._id ? action.payload : post
+      );
+    case FETCH_ALL:
       //action.payload are actually our posts
       return action.payload;
-    case "CREATE":
+    case CREATE:
       return [...posts, action.payload];
     default:
       return posts;

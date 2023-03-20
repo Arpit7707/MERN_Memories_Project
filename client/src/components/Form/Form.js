@@ -3,9 +3,15 @@ import { TextField, Button, Typography, Paper } from "@material-ui/core";
 import useStyles from "./styles";
 import FileBase from "react-file-base64";
 import { useDispatch, useSelector } from "react-redux";
-import { createPost } from "../../actions/posts";
+import { createPost, updatePost } from "../../actions/posts";
 
-const Form = () => {
+const Form = ({ currentId, setCurrentId }) => {
+  // as parameter of callback function in useSelector() hook, we get access to that whole global redux store (or state)
+  //returning state.posts (.posts coz in reducers/index.js it's posts)
+  const post = useSelector((state) =>
+    currentId ? state.posts.find((p) => p._id === currentId) : null
+  );
+
   const [postData, setPostData] = useState({
     creator: "",
     title: "",
@@ -29,14 +35,33 @@ const Form = () => {
   //allows us to actually dispatch action
   const dispatch = useDispatch();
 
+  useEffect(() => {
+    if (post) setPostData(post);
+  }, [post]);
+
   const handleSubmit = (e) => {
     //to not to get refresh in browser
     e.preventDefault();
-    //dispatching action and passing whole postData object
-    dispatch(createPost(postData));
+
+    if (currentId) {
+      dispatch(updatePost(currentId, postData));
+    } else {
+      //dispatching action and passing whole postData object
+      dispatch(createPost(postData));
+    }
+    clear();
   };
 
-  const clear = () => {};
+  const clear = () => {
+    setCurrentId(0);
+    setPostData({
+      creator: "",
+      title: "",
+      message: "",
+      tags: "",
+      selectedFile: "",
+    });
+  };
 
   return (
     //paper is div with white background
@@ -47,9 +72,9 @@ const Form = () => {
         className={`${classes.root} ${classes.form}`}
         onSubmit={handleSubmit}
       >
-        {/* <Typography variant="h6">
+        <Typography variant="h6">
           {currentId ? `Editing "${post.title}"` : "Creating a Memory"}
-        </Typography> */}
+        </Typography>
         <TextField
           name="creator"
           variant="outlined"

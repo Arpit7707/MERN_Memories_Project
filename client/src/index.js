@@ -5,6 +5,7 @@ import ReactDOM from "react-dom";
 //provider is going to keep track of that store which is that global state and that allows us to access that store
 //from anywhere inside of the app
 import { Provider } from "react-redux";
+import "./index.css";
 
 import { createStore, compose, applyMiddleware } from "redux";
 import thunk from "redux-thunk";
