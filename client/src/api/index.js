@@ -1,7 +1,7 @@
 import axios from "axios"; //using axios for making api calls
 
 //url pointing to our backend route
-const url = "http://localhost:5000/posts";
+const url = "https://mern-memories-project-api.vercel.app/";
 
 //making api call for fetching data
 //function to 'get' call to our url
